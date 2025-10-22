@@ -1,7 +1,14 @@
-import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+import { GradientBackground } from '../../components/ui/GradientBackground';
+import { GlassCard } from '../../components/ui/GlassCard';
+import { PrimaryButton } from '../../components/ui/PrimaryButton';
+import { TextField } from '../../components/ui/TextField';
+import { Colors } from '../../constants/Colors';
 import { registrarUsuario } from '../../database';
 
 export default function Registro() {
@@ -76,122 +83,119 @@ export default function Registro() {
     };
 
     return (
-        <View style={estilos.contenedor}>
+        <GradientBackground>
             <StatusBar style="light" />
+            <View style={estilos.contenedor}>
+                <GlassCard style={estilos.card}>
+                    <View style={estilos.header}>
+                        <View>
+                            <Text style={estilos.etiqueta}>Crea tu perfil</Text>
+                            <Text style={estilos.titulo}>Registro</Text>
+                            <Text style={estilos.subtitulo}>Diseñado para ayudarte a mantener el control sin esfuerzo.</Text>
+                        </View>
+                        <View style={estilos.iconWrapper}>
+                            <Ionicons name="person-add" size={28} color={Colors.white} />
+                        </View>
+                    </View>
 
-            <Text style={estilos.titulo}>Regístrate</Text>
-            <Text style={estilos.subtitulo}>Crea tu cuenta para comenzar</Text>
+                    <TextField label="Nombre" placeholder="Tu nombre" value={nombre} onChangeText={setNombre} />
+                    <TextField label="Apellido" placeholder="Tu apellido" value={apellido} onChangeText={setApellido} />
+                    <TextField
+                        label="Correo electrónico"
+                        placeholder="ejemplo@email.com"
+                        value={correo}
+                        onChangeText={setCorreo}
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                    />
+                    <TextField
+                        label="Contraseña"
+                        placeholder="Crea una contraseña segura"
+                        value={contrasenia}
+                        onChangeText={setContrasenia}
+                        secureTextEntry
+                    />
+                    <TextField
+                        label="Confirmar contraseña"
+                        placeholder="Repite la contraseña"
+                        value={confirmar}
+                        onChangeText={setConfirmar}
+                        secureTextEntry
+                    />
 
-            <TextInput
-                placeholder="Ingrese su nombre"
-                placeholderTextColor="#999"
-                style={estilos.entrada}
-                value={nombre}
-                onChangeText={setNombre}
-            />
-            <TextInput
-                placeholder="Ingrese su apellido"
-                placeholderTextColor="#999"
-                style={estilos.entrada}
-                value={apellido}
-                onChangeText={setApellido}
-            />
-            <TextInput
-                placeholder="Ingrese su correo"
-                placeholderTextColor="#999"
-                style={estilos.entrada}
-                value={correo}
-                onChangeText={setCorreo}
-                keyboardType="email-address"
-                autoCapitalize="none"
-            />
-            <TextInput
-                placeholder="Ingrese su contraseña"
-                placeholderTextColor="#999"
-                style={estilos.entrada}
-                value={contrasenia}
-                onChangeText={setContrasenia}
-                secureTextEntry
-            />
-            <TextInput
-                placeholder="Verifique su contraseña"
-                placeholderTextColor="#999"
-                style={estilos.entrada}
-                value={confirmar}
-                onChangeText={setConfirmar}
-                secureTextEntry
-            />
+                    <PrimaryButton
+                        label={cargando ? 'Registrando...' : 'Registrarme'}
+                        onPress={manejarRegistro}
+                        disabled={cargando}
+                    />
 
-            <TouchableOpacity 
-                style={[estilos.boton, cargando && estilos.botonDeshabilitado]} 
-                onPress={manejarRegistro}
-                disabled={cargando}
-            >
-                <Text style={estilos.textoBoton}>
-                    {cargando ? 'Registrando...' : 'Registrarse'}
-                </Text>
-            </TouchableOpacity>
-
-            <Text style={estilos.mensaje}>
-                Ya tienes una cuenta?{' '}
-                <Text style={estilos.link} onPress={() => router.push('/(auth)/iniciar-sesion')}>
-                    ¡Inicia Sesión!
-                </Text>
-            </Text>
-        </View>
+                    <View style={estilos.footer}>
+                        <Text style={estilos.footerText}>¿Ya tienes una cuenta?</Text>
+                        <TouchableOpacity onPress={() => router.push('/(auth)/iniciar-sesion')}>
+                            <Text style={estilos.link}>Iniciar sesión</Text>
+                        </TouchableOpacity>
+                    </View>
+                </GlassCard>
+            </View>
+        </GradientBackground>
     );
 }
 
 const estilos = StyleSheet.create({
     contenedor: {
         flex: 1,
-        backgroundColor: '#121212',
-        padding: 30,
+        padding: 32,
         justifyContent: 'center',
+    },
+    card: {
+        rowGap: 18,
     },
     titulo: {
         fontSize: 28,
-        fontWeight: 'bold',
-        color: '#ffffff',
-        marginBottom: 10,
+        fontWeight: '800',
+        color: Colors.textPrimary,
     },
     subtitulo: {
         fontSize: 14,
-        color: '#cccccc',
-        marginBottom: 30,
+        color: Colors.textSecondary,
+        marginTop: 6,
+        marginBottom: 20,
     },
-    entrada: {
-        borderWidth: 1,
-        borderColor: '#ffffff',
-        borderRadius: 10,
-        paddingHorizontal: 15,
-        paddingVertical: 12,
-        marginBottom: 15,
-        fontSize: 16,
-        color: '#ffffff',
+    footer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        columnGap: 8,
     },
-    boton: {
-        backgroundColor: '#9C27B0',
-        paddingVertical: 14,
-        borderRadius: 10,
-        marginBottom: 25,
-    },
-    botonDeshabilitado: {
-        backgroundColor: '#666666',
-    },
-    textoBoton: {
-        color: '#ffffff',
-        fontSize: 16,
-        fontWeight: 'bold',
-        textAlign: 'center',
-    },
-    mensaje: {
-        textAlign: 'center',
-        color: '#cccccc',
+    footerText: {
+        color: Colors.textSecondary,
         fontSize: 14,
     },
     link: {
-        color: '#E040FB',
-        fontWeight: 'bold',
+        color: Colors.secondary,
+        fontWeight: '600',
+        textDecorationLine: 'underline',
+    },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        columnGap: 16,
+    },
+    etiqueta: {
+        color: Colors.secondary,
+        fontWeight: '600',
+        letterSpacing: 1,
+        textTransform: 'uppercase',
+        marginBottom: 4,
+    },
+    iconWrapper: {
+        backgroundColor: Colors.primary,
+        borderRadius: 16,
+        padding: 14,
+        shadowColor: Colors.primary,
+        shadowOpacity: 0.45,
+        shadowOffset: { width: 0, height: 12 },
+        shadowRadius: 20,
+        elevation: 10,
     },
 });

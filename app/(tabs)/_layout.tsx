@@ -5,6 +5,7 @@ import { Platform } from 'react-native';
 
 import { HapticTab } from '@/components/HapticTab';
 import TabBarBackground from '@/components/ui/TabBarBackground';
+import { Colors } from '../../constants/Colors';
 import { useAuth } from '../../hooks/useAuth';
 
 export default function TabLayout() {
@@ -37,8 +38,13 @@ export default function TabLayout() {
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
         tabBarStyle: {
-          backgroundColor: '#1e1e1e',
-          borderTopColor: '#333',
+          backgroundColor: Colors.backgroundElevated,
+          borderTopColor: Colors.glassBorder,
+          borderTopWidth: 1,
+          height: 80,
+          paddingHorizontal: 20,
+          paddingTop: 12,
+          paddingBottom: Platform.OS === 'ios' ? 24 : 16,
           ...Platform.select({
             ios: {
               position: 'absolute',
@@ -46,8 +52,17 @@ export default function TabLayout() {
             default: {},
           }),
         },
-        tabBarActiveTintColor: '#9C27B0',
-        tabBarInactiveTintColor: '#666',
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '600',
+          letterSpacing: 0.3,
+        },
+        tabBarItemStyle: {
+          borderRadius: 16,
+        },
+        tabBarActiveTintColor: Colors.secondary,
+        tabBarInactiveTintColor: Colors.textMuted,
+        tabBarHideOnKeyboard: true,
       }}>
       <Tabs.Screen
         name="inicio"

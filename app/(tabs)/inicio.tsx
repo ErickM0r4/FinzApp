@@ -4,6 +4,10 @@ import { useFocusEffect, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+import { GradientBackground } from '../../components/ui/GradientBackground';
+import { GlassCard } from '../../components/ui/GlassCard';
+import { Colors } from '../../constants/Colors';
 import { Billetera, obtenerBilleteras, obtenerTransacciones, Transaccion } from '../../database';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -65,8 +69,10 @@ export default function Inicio() {
     };
 
     return (
-        <View style={estilos.contenedor}>
+        <GradientBackground>
             <StatusBar style="light" />
+
+            <View style={estilos.contenido}>
 
             {/* Encabezado */}
             <View style={estilos.encabezado}>
@@ -77,19 +83,19 @@ export default function Inicio() {
                     <Text style={estilos.subtituloSaludo}>Gestiona tus finanzas</Text>
                 </View>
                 <TouchableOpacity onPress={() => router.push('/(tabs)/buscar' as any)}>
-                    <Ionicons name="search" size={24} color="white" />
+                    <Ionicons name="search" size={24} color={Colors.white} />
                 </TouchableOpacity>
             </View>
 
             {/* Panel principal consolidado */}
-            <View style={estilos.panelPrincipal}>
+            <GlassCard style={estilos.panelPrincipal} highlight>
                 {/* Saldo total */}
                 <View style={estilos.seccionSaldo}>
                     <View style={estilos.filaSaldo}>
                         <View>
                             <Text style={estilos.etiquetaSaldo}>Saldo total</Text>
                             {cargando ? (
-                                <ActivityIndicator size="small" color="#9C27B0" style={{ marginVertical: 10 }} />
+                                <ActivityIndicator size="small" color={Colors.secondary} style={{ marginVertical: 10 }} />
                             ) : (
                                 <Text style={estilos.montoSaldo}>
                                     ${billeteras.reduce((total, billetera) => total + (billetera.saldo || 0), 0).toLocaleString()}
@@ -138,11 +144,11 @@ export default function Inicio() {
                         </View>
                     </View>
                 )}
-            </View>
+            </GlassCard>
 
             {/* Lista de transacciones - más compacta */}
             {!cargando && transacciones.length > 0 && (
-                <View style={estilos.contenedorTransacciones}>
+                <GlassCard style={estilos.transaccionesCard}>
                     <View style={estilos.encabezadoTransacciones}>
                         <Text style={estilos.tituloSeccion}>Últimas transacciones</Text>
                         <TouchableOpacity onPress={() => router.push('/(tabs)/estadisticas' as any)}>
@@ -193,7 +199,7 @@ export default function Inicio() {
                                         {item.descripcion && <Text style={estilos.descripcion} numberOfLines={1}>{item.descripcion}</Text>}
                                     </View>
                                     <View style={estilos.infoDerecha}>
-                                        <Text style={[estilos.montoItem, { color: item.tipo === 'ingreso' ? '#4caf50' : '#f44336' }]}> 
+                                        <Text style={[estilos.montoItem, { color: item.tipo === 'ingreso' ? Colors.green : Colors.red }]}>
                                             {item.tipo === 'ingreso' ? `+$${item.monto.toFixed(2)}` : `-$${item.monto.toFixed(2)}`}
                                         </Text>
                                         <Text style={estilos.fecha}>{fechaFormateada}</Text>
@@ -202,22 +208,22 @@ export default function Inicio() {
                             );
                         }}
                     />
-                </View>
+                </GlassCard>
             )}
 
             {/* Estado vacío cuando no hay transacciones */}
             {!cargando && transacciones.length === 0 && (
-                <View style={estilos.estadoVacio}>
-                    <Ionicons name="receipt-outline" size={48} color="#666" />
+                <GlassCard style={estilos.estadoVacio}>
+                    <Ionicons name="receipt-outline" size={48} color={Colors.textMuted} />
                     <Text style={estilos.textoVacio}>No hay transacciones</Text>
                     <Text style={estilos.subtextoVacio}>Toca el botón + para agregar tu primera transacción</Text>
-                </View>
+                </GlassCard>
             )}
 
             {/* Estado de carga */}
             {cargando && (
                 <View style={estilos.contenedorCargando}>
-                    <ActivityIndicator size="large" color="#9C27B0" />
+                    <ActivityIndicator size="large" color={Colors.secondary} />
                     <Text style={estilos.textoCargando}>Cargando datos...</Text>
                 </View>
             )}
@@ -227,19 +233,19 @@ export default function Inicio() {
                 style={estilos.botonFlotante}
                 onPress={() => router.push('/(tabs)/nueva-transaccion' as any)}
             >
-                <Ionicons name="add" size={28} color="white" />
+                <Ionicons name="add" size={28} color={Colors.white} />
             </TouchableOpacity>
         </View>
+        </GradientBackground>
     );
 }
 
 const estilos = StyleSheet.create({
-    contenedor: {
+    contenido: {
         flex: 1,
-        backgroundColor: '#121212',
-        padding: 20,
-        paddingTop: 50,
-        paddingBottom: 140, // Increased padding to prevent navigation bar overlap
+        paddingHorizontal: 24,
+        paddingTop: 60,
+        paddingBottom: 140,
     },
     encabezado: {
         flexDirection: 'row',
@@ -249,22 +255,17 @@ const estilos = StyleSheet.create({
     },
     saludo: {
         fontSize: 24,
-        color: '#fff',
+        color: Colors.textPrimary,
         fontWeight: 'bold',
     },
     subtituloSaludo: {
         fontSize: 14,
-        color: '#ccc',
+        color: Colors.textSecondary,
         marginTop: 4,
     },
     // Panel principal consolidado
     panelPrincipal: {
-        backgroundColor: '#1a1a1a',
-        borderRadius: 16,
-        padding: 20,
         marginBottom: 20,
-        borderWidth: 1,
-        borderColor: '#2a2a2a',
     },
     seccionSaldo: {
         marginBottom: 20,
@@ -277,16 +278,16 @@ const estilos = StyleSheet.create({
     },
     etiquetaSaldo: {
         fontSize: 14,
-        color: '#ccc',
+        color: Colors.textSecondary,
         marginBottom: 8,
     },
     montoSaldo: {
         fontSize: 32,
         fontWeight: 'bold',
-        color: '#fff',
+        color: Colors.textPrimary,
     },
     botonCrear: {
-        backgroundColor: '#9C27B0',
+        backgroundColor: Colors.primary,
         width: 40,
         height: 40,
         borderRadius: 20,
@@ -295,17 +296,17 @@ const estilos = StyleSheet.create({
     },
     infoBilleteras: {
         fontSize: 12,
-        color: '#999',
+        color: Colors.textMuted,
     },
     // Resumen de transacciones dentro del panel principal
     resumenTransacciones: {
         paddingTop: 20,
         borderTopWidth: 1,
-        borderTopColor: '#2a2a2a',
+        borderTopColor: Colors.glassBorder,
     },
     tituloResumen: {
         fontSize: 16,
-        color: '#9C27B0',
+        color: Colors.secondary,
         fontWeight: '600',
         marginBottom: 12,
     },
@@ -319,16 +320,17 @@ const estilos = StyleSheet.create({
     numeroResumen: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#fff',
+        color: Colors.textPrimary,
     },
     etiquetaResumen: {
         fontSize: 12,
-        color: '#ccc',
+        color: Colors.textSecondary,
         marginTop: 4,
     },
     // Lista de transacciones
-    contenedorTransacciones: {
+    transaccionesCard: {
         flex: 1,
+        marginBottom: 20,
     },
     encabezadoTransacciones: {
         flexDirection: 'row',
@@ -338,27 +340,27 @@ const estilos = StyleSheet.create({
     },
     tituloSeccion: {
         fontSize: 18,
-        color: '#fff',
+        color: Colors.textPrimary,
         fontWeight: 'bold',
     },
     verTodas: {
         fontSize: 14,
-        color: '#9C27B0',
+        color: Colors.secondary,
         fontWeight: '600',
     },
     item: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#1a1a1a',
+        backgroundColor: Colors.surfaceElevated,
         padding: 16,
         borderRadius: 12,
         marginBottom: 8,
         borderWidth: 1,
-        borderColor: '#2a2a2a',
+        borderColor: Colors.glassBorder,
         minHeight: 64, // Ensure minimum touch area
         // Add visual feedback for better UX
         elevation: 2,
-        shadowColor: '#000',
+        shadowColor: Colors.cardShadow,
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.2,
         shadowRadius: 2,
@@ -372,12 +374,12 @@ const estilos = StyleSheet.create({
         alignItems: 'center',
     },
     categoria: {
-        color: '#fff',
+        color: Colors.textPrimary,
         fontWeight: '600',
         fontSize: 15,
     },
     descripcion: {
-        color: '#aaa',
+        color: Colors.textSecondary,
         fontSize: 13,
         marginTop: 2,
     },
@@ -390,7 +392,7 @@ const estilos = StyleSheet.create({
     },
     fecha: {
         fontSize: 12,
-        color: '#ccc',
+        color: Colors.textMuted,
         marginTop: 2,
     },
     // Estados
@@ -401,7 +403,7 @@ const estilos = StyleSheet.create({
         marginTop: 50,
     },
     textoCargando: {
-        color: '#ccc',
+        color: Colors.textSecondary,
         marginTop: 10,
         fontSize: 14,
     },
@@ -409,19 +411,17 @@ const estilos = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 50,
+        rowGap: 12,
     },
     textoVacio: {
-        color: '#ccc',
+        color: Colors.textSecondary,
         fontSize: 18,
-        marginTop: 20,
         textAlign: 'center',
         fontWeight: '600',
     },
     subtextoVacio: {
-        color: '#999',
+        color: Colors.textMuted,
         fontSize: 14,
-        marginTop: 10,
         textAlign: 'center',
     },
     // Botón flotante
@@ -429,16 +429,20 @@ const estilos = StyleSheet.create({
         position: 'absolute',
         bottom: 140, // Moved higher to avoid navigation bar
         right: 30,
-        backgroundColor: '#9C27B0',
+        backgroundColor: Colors.primary,
         width: 56,
         height: 56,
         borderRadius: 28,
         justifyContent: 'center',
         alignItems: 'center',
         elevation: 8,
-        shadowColor: '#9C27B0',
+        shadowColor: Colors.primary,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
+    },
+    listaContenido: {
+        paddingBottom: 10,
+        rowGap: 10,
     },
 });

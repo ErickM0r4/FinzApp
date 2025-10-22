@@ -4,6 +4,11 @@ import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+import { GradientBackground } from '../../components/ui/GradientBackground';
+import { GlassCard } from '../../components/ui/GlassCard';
+import { PrimaryButton } from '../../components/ui/PrimaryButton';
+import { Colors } from '../../constants/Colors';
 import { Billetera, obtenerBilleteras } from '../../database';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -45,157 +50,198 @@ export default function BilleteraScreen() {
 
     if (cargando) {
         return (
-            <View style={[estilos.contenedor, estilos.contenedorCargando]}>
+            <GradientBackground>
                 <StatusBar style="light" />
-                <ActivityIndicator size="large" color="#9C27B0" />
-                <Text style={estilos.textoCargando}>Cargando billeteras...</Text>
-            </View>
+                <View style={[estilos.contenido, estilos.contenedorCargando]}>
+                    <ActivityIndicator size="large" color={Colors.secondary} />
+                    <Text style={estilos.textoCargando}>Cargando billeteras...</Text>
+                </View>
+            </GradientBackground>
         );
     }
 
     return (
-        <View style={estilos.contenedor}>
+        <GradientBackground>
             <StatusBar style="light" />
-            <Text style={estilos.balance}>${balanceTotal.toLocaleString()}</Text>
-            <Text style={estilos.subtitulo}>balance total</Text>
-
-            <View style={estilos.contenedorCarteras}>
-                <View style={estilos.headerCarteras}>
-                    <Text style={estilos.titulo}>Mis Carteras</Text>
-                    <TouchableOpacity
-                        style={estilos.botonAgregar}
+            <View style={estilos.contenido}>
+                <GlassCard style={estilos.balanceCard} highlight>
+                    <Text style={estilos.balanceLabel}>Balance total</Text>
+                    <Text style={estilos.balance}>${balanceTotal.toLocaleString()}</Text>
+                    <Text style={estilos.balanceMeta}>
+                        {billeteras.length > 0 ? `${billeteras.length} billetera${billeteras.length !== 1 ? 's' : ''} activas` : 'Sin billeteras registradas'}
+                    </Text>
+                    <PrimaryButton
+                        label="Nueva billetera"
                         onPress={() => router.push('/(tabs)/nueva-billetera')}
-                    >
-                        <Ionicons name="add" size={20} color="white" />
-                    </TouchableOpacity>
-                </View>
+                        small
+                        icon={<Ionicons name="add" size={18} color={Colors.white} />}
+                    />
+                </GlassCard>
 
-                {billeteras.length > 0 ? (
-                    billeteras.map((billetera) => (
-                        <TouchableOpacity
-                            key={billetera.id}
-                            style={estilos.item}
-                            onPress={() =>
-                                router.push({
-                                    pathname: '/(tabs)/detalle-billetera',
-                                    params: {
-                                        id: billetera.id.toString(),
-                                        nombre: billetera.nombre,
-                                        monto: billetera.saldo.toString(),
-                                    },
-                                })
-                            }
-                        >
-                            <Image
-                                source={require('../../assets/images/money.png')}
-                                style={estilos.icono}
-                            />
-                            <View style={estilos.info}>
-                                <Text style={estilos.nombre}>{billetera.nombre}</Text>
-                                <Text style={estilos.monto}>${billetera.saldo.toLocaleString()}</Text>
-                            </View>
-                            <Ionicons name="chevron-forward" size={24} color="white" />
+                <GlassCard style={estilos.listaCard}>
+                    <View style={estilos.headerCarteras}>
+                        <Text style={estilos.titulo}>Mis billeteras</Text>
+                        <TouchableOpacity onPress={() => cargarBilleteras()}>
+                            <Text style={estilos.refresh}>Actualizar</Text>
                         </TouchableOpacity>
-                    ))
-                ) : (
-                    <View style={estilos.sinBilleteras}>
-                        <Text style={estilos.textoSinBilleteras}>No tienes billeteras creadas</Text>
-                        <Text style={estilos.subtextoSinBilleteras}>Crea tu primera billetera para comenzar</Text>
                     </View>
-                )}
+
+                    {billeteras.length > 0 ? (
+                        billeteras.map((billetera) => (
+                            <TouchableOpacity
+                                key={billetera.id}
+                                style={estilos.item}
+                                onPress={() =>
+                                    router.push({
+                                        pathname: '/(tabs)/detalle-billetera',
+                                        params: {
+                                            id: billetera.id.toString(),
+                                            nombre: billetera.nombre,
+                                            monto: billetera.saldo.toString(),
+                                        },
+                                    })
+                                }
+                            >
+                                <View style={estilos.iconoWrapper}>
+                                    <Image
+                                        source={require('../../assets/images/money.png')}
+                                        style={estilos.icono}
+                                    />
+                                </View>
+                                <View style={estilos.info}>
+                                    <Text style={estilos.nombre}>{billetera.nombre}</Text>
+                                    <Text style={estilos.monto}>${billetera.saldo.toLocaleString()}</Text>
+                                </View>
+                                <Ionicons name="chevron-forward" size={22} color={Colors.textSecondary} />
+                            </TouchableOpacity>
+                        ))
+                    ) : (
+                        <View style={estilos.sinBilleteras}>
+                            <Ionicons name="wallet-outline" size={48} color={Colors.textMuted} />
+                            <Text style={estilos.textoSinBilleteras}>No tienes billeteras creadas</Text>
+                            <Text style={estilos.subtextoSinBilleteras}>Crea tu primera billetera para comenzar</Text>
+                        </View>
+                    )}
+                </GlassCard>
             </View>
-        </View>
+        </GradientBackground>
     );
 }
 
 const estilos = StyleSheet.create({
-    contenedor: {
+    contenido: {
         flex: 1,
-        backgroundColor: '#121212',
+        paddingHorizontal: 24,
         paddingTop: 60,
-        paddingHorizontal: 20,
-        paddingBottom: 100, // Margen para la barra de navegación
+        paddingBottom: 120,
+        rowGap: 20,
     },
     contenedorCargando: {
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        rowGap: 12,
     },
     textoCargando: {
-        color: '#ccc',
+        color: Colors.textSecondary,
         marginTop: 10,
         fontSize: 16,
     },
+    balanceCard: {
+        rowGap: 14,
+    },
+    balanceLabel: {
+        color: Colors.secondary,
+        textTransform: 'uppercase',
+        letterSpacing: 1,
+        fontWeight: '600',
+    },
     balance: {
-        fontSize: 32,
-        fontWeight: 'bold',
-        color: 'white',
-        textAlign: 'center',
+        fontSize: 34,
+        fontWeight: '800',
+        color: Colors.textPrimary,
     },
-    subtitulo: {
-        color: '#ccc',
-        textAlign: 'center',
-        marginBottom: 30,
+    balanceMeta: {
+        color: Colors.textSecondary,
+        fontSize: 14,
+        marginBottom: 8,
     },
-    contenedorCarteras: {
-        backgroundColor: '#1e1e1e',
-        borderRadius: 20,
-        padding: 20,
+    listaCard: {
         flex: 1,
+        rowGap: 16,
     },
     headerCarteras: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 15,
     },
     titulo: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: 'bold',
+        color: Colors.textPrimary,
+        fontSize: 18,
+        fontWeight: '700',
+    },
+    refresh: {
+        color: Colors.secondary,
+        fontSize: 14,
+        textDecorationLine: 'underline',
     },
     item: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: 10,
+        backgroundColor: Colors.surfaceElevated,
+        borderRadius: 16,
+        borderWidth: 1,
+        borderColor: Colors.glassBorder,
+        paddingVertical: 14,
+        paddingHorizontal: 18,
+        marginBottom: 8,
+        columnGap: 16,
+        shadowColor: Colors.cardShadow,
+        shadowOpacity: 0.35,
+        shadowOffset: { width: 0, height: 8 },
+        shadowRadius: 16,
+        elevation: 6,
+    },
+    iconoWrapper: {
+        width: 48,
+        height: 48,
+        borderRadius: 24,
+        backgroundColor: Colors.surface,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     icono: {
-        width: 40,
-        height: 40,
-        marginRight: 10,
+        width: 28,
+        height: 28,
+        tintColor: Colors.secondary,
     },
     info: {
         flex: 1,
     },
     nombre: {
-        color: 'white',
-        fontWeight: 'bold',
+        color: Colors.textPrimary,
+        fontSize: 16,
+        fontWeight: '600',
     },
     monto: {
-        color: '#ccc',
-    },
-    botonAgregar: {
-        backgroundColor: '#9C27B0',
-        width: 30,
-        height: 30,
-        borderRadius: 15,
-        justifyContent: 'center',
-        alignItems: 'center',
+        color: Colors.textSecondary,
+        marginTop: 4,
+        fontSize: 14,
     },
     sinBilleteras: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        rowGap: 12,
         paddingVertical: 40,
     },
     textoSinBilleteras: {
-        color: '#fff',
+        color: Colors.textSecondary,
         fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 10,
+        fontWeight: '600',
         textAlign: 'center',
     },
     subtextoSinBilleteras: {
-        color: '#ccc',
+        color: Colors.textMuted,
         fontSize: 14,
         textAlign: 'center',
     },
