@@ -1,7 +1,14 @@
-import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+import { GradientBackground } from '../../components/ui/GradientBackground';
+import { GlassCard } from '../../components/ui/GlassCard';
+import { PrimaryButton } from '../../components/ui/PrimaryButton';
+import { TextField } from '../../components/ui/TextField';
+import { Colors } from '../../constants/Colors';
 import { iniciarSesion, Usuario } from '../../database';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -61,108 +68,122 @@ export default function IniciarSesion() {
     };
 
     return (
-        <View style={estilos.contenedor}>
+        <GradientBackground>
             <StatusBar style="light" />
+            <View style={estilos.contenedor}>
+                <GlassCard style={estilos.card}>
+                    <View style={estilos.header}>
+                        <View>
+                            <Text style={estilos.etiqueta}>Bienvenido de vuelta</Text>
+                            <Text style={estilos.titulo}>Inicia sesión</Text>
+                            <Text style={estilos.subtitulo}>Tu tablero financiero te espera con insights renovados.</Text>
+                        </View>
+                        <View style={estilos.iconWrapper}>
+                            <Ionicons name="lock-closed" size={28} color={Colors.white} />
+                        </View>
+                    </View>
 
-            <Text style={estilos.titulo}>Hola, Bienvenido</Text>
-            <Text style={estilos.subtitulo}>Inicia sesión para gestionar tus finanzas ahora</Text>
+                    <TextField
+                        label="Correo electrónico"
+                        placeholder="ejemplo@email.com"
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                        value={correo}
+                        onChangeText={setCorreo}
+                    />
+                    <TextField
+                        label="Contraseña"
+                        placeholder="Ingresa tu contraseña"
+                        secureTextEntry
+                        value={contrasena}
+                        onChangeText={setContrasena}
+                    />
 
-            <TextInput
-                placeholder="Ingrese su email"
-                placeholderTextColor="#999"
-                style={estilos.entrada}
-                value={correo}
-                onChangeText={setCorreo}
-                keyboardType="email-address"
-                autoCapitalize="none"
-            />
-            <TextInput
-                placeholder="Ingrese su contraseña"
-                placeholderTextColor="#999"
-                style={estilos.entrada}
-                value={contrasena}
-                onChangeText={setContrasena}
-                secureTextEntry
-            />
+                    <TouchableOpacity onPress={() => Alert.alert('Recuperar contraseña', 'Pronto podrás restablecerla desde la aplicación.') }>
+                        <Text style={estilos.olvido}>¿Olvidaste tu contraseña?</Text>
+                    </TouchableOpacity>
 
-            <Text style={estilos.olvido}>¿Olvidó su Contraseña?</Text>
+                    <PrimaryButton
+                        label={cargando ? 'Iniciando...' : 'Iniciar sesión'}
+                        onPress={manejarInicioSesion}
+                        disabled={cargando}
+                    />
 
-            <TouchableOpacity 
-                style={[estilos.boton, cargando && estilos.botonDeshabilitado]} 
-                onPress={manejarInicioSesion}
-                disabled={cargando}
-            >
-                <Text style={estilos.textoBoton}>
-                    {cargando ? 'Iniciando...' : 'Iniciar Sesión'}
-                </Text>
-            </TouchableOpacity>
-
-            <Text style={estilos.mensaje}>
-                ¿No tienes una cuenta?{' '}
-                <Text style={estilos.link} onPress={() => router.push('/(auth)/registro')}>
-                    ¡Regístrate!
-                </Text>
-            </Text>
-        </View>
+                    <View style={estilos.footer}>
+                        <Text style={estilos.footerText}>¿No tienes una cuenta?</Text>
+                        <TouchableOpacity onPress={() => router.push('/(auth)/registro')}>
+                            <Text style={estilos.link}>Crear cuenta</Text>
+                        </TouchableOpacity>
+                    </View>
+                </GlassCard>
+            </View>
+        </GradientBackground>
     );
 }
 
 const estilos = StyleSheet.create({
     contenedor: {
         flex: 1,
-        backgroundColor: '#121212',
-        padding: 30,
+        padding: 32,
         justifyContent: 'center',
+    },
+    card: {
+        rowGap: 20,
     },
     titulo: {
         fontSize: 28,
-        fontWeight: 'bold',
-        color: '#ffffff',
-        marginBottom: 10,
+        fontWeight: '800',
+        color: Colors.textPrimary,
     },
     subtitulo: {
         fontSize: 14,
-        color: '#cccccc',
-        marginBottom: 30,
-    },
-    entrada: {
-        borderWidth: 1,
-        borderColor: '#ffffff',
-        borderRadius: 10,
-        paddingHorizontal: 15,
-        paddingVertical: 12,
-        marginBottom: 15,
-        fontSize: 16,
-        color: '#ffffff',
+        color: Colors.textSecondary,
+        marginTop: 6,
+        marginBottom: 18,
     },
     olvido: {
-        color: '#cccccc',
+        color: Colors.textSecondary,
         textAlign: 'right',
-        marginBottom: 25,
         fontSize: 13,
+        textDecorationLine: 'underline',
+        marginBottom: 8,
     },
-    boton: {
-        backgroundColor: '#9C27B0',
-        paddingVertical: 14,
-        borderRadius: 10,
-        marginBottom: 25,
+    footer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        columnGap: 8,
     },
-    botonDeshabilitado: {
-        backgroundColor: '#666666',
-    },
-    textoBoton: {
-        color: '#ffffff',
-        fontSize: 16,
-        fontWeight: 'bold',
-        textAlign: 'center',
-    },
-    mensaje: {
-        textAlign: 'center',
-        color: '#cccccc',
+    footerText: {
+        color: Colors.textSecondary,
         fontSize: 14,
     },
     link: {
-        color: '#E040FB',
-        fontWeight: 'bold',
+        color: Colors.secondary,
+        fontWeight: '600',
+        fontSize: 14,
+        textDecorationLine: 'underline',
+    },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        columnGap: 16,
+    },
+    etiqueta: {
+        color: Colors.secondary,
+        fontWeight: '600',
+        letterSpacing: 1,
+        textTransform: 'uppercase',
+        marginBottom: 4,
+    },
+    iconWrapper: {
+        backgroundColor: Colors.primary,
+        borderRadius: 16,
+        padding: 14,
+        shadowColor: Colors.primary,
+        shadowOpacity: 0.45,
+        shadowOffset: { width: 0, height: 12 },
+        shadowRadius: 20,
+        elevation: 10,
     },
 });

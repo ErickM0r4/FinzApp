@@ -1,6 +1,12 @@
-import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
+import { useRouter } from 'expo-router';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+import { GradientBackground } from '../../components/ui/GradientBackground';
+import { GlassCard } from '../../components/ui/GlassCard';
+import { PrimaryButton } from '../../components/ui/PrimaryButton';
+import { Colors } from '../../constants/Colors';
 
 export default function Bienvenida() {
     const router = useRouter();
@@ -10,63 +16,111 @@ export default function Bienvenida() {
     };
 
     return (
-        <View style={estilos.contenedor}>
+        <GradientBackground>
             <StatusBar style="light" />
+            <View style={estilos.contenedor}>
+                <GlassCard style={estilos.heroCard}>
+                    <View style={estilos.heroHeader}>
+                        <View style={estilos.heroCopy}>
+                            <Text style={estilos.badge}>Bienvenido a Mora</Text>
+                            <Text style={estilos.titulo}>Toma el control de tus finanzas</Text>
+                            <Text style={estilos.subtitulo}>
+                                Sigue tus billeteras, automatiza hábitos saludables y celebra cada logro con una interfaz premium.
+                            </Text>
+                        </View>
+                        <Image
+                            source={require('../../assets/images/money.png')}
+                            style={estilos.imagen}
+                            resizeMode="contain"
+                        />
+                    </View>
 
-            <Image
-                source={require('../../assets/images/money.png')}
-                style={estilos.imagen}
-                resizeMode="contain"
-            />
+                    <View style={estilos.featureList}>
+                        <View style={estilos.featureItem}>
+                            <Ionicons name="sparkles" color={Colors.secondary} size={18} />
+                            <Text style={estilos.featureText}>Diseño envolvente con resúmenes precisos de tus cuentas.</Text>
+                        </View>
+                        <View style={estilos.featureItem}>
+                            <Ionicons name="calendar" color={Colors.secondary} size={18} />
+                            <Text style={estilos.featureText}>Planifica cada paso con recordatorios y estadísticas oportunas.</Text>
+                        </View>
+                        <View style={estilos.featureItem}>
+                            <Ionicons name="shield-checkmark" color={Colors.secondary} size={18} />
+                            <Text style={estilos.featureText}>Tus datos permanecen seguros y siempre disponibles.</Text>
+                        </View>
+                    </View>
 
-            <Text style={estilos.titulo}>Toma el control de tus Finanzas</Text>
-            <Text style={estilos.subtitulo}>
-                Haga clic en el botón para empezar este nuevo hábito
-            </Text>
-
-            <TouchableOpacity style={estilos.boton} onPress={comenzar}>
-                <Text style={estilos.textoBoton}>COMENZAR</Text>
-            </TouchableOpacity>
-        </View>
+                    <PrimaryButton label="Comenzar" onPress={comenzar} />
+                    <TouchableOpacity onPress={() => router.push('/(auth)/iniciar-sesion')} style={estilos.secondaryAction}>
+                        <Text style={estilos.secondaryText}>Ya tengo una cuenta, iniciar sesión</Text>
+                    </TouchableOpacity>
+                </GlassCard>
+            </View>
+        </GradientBackground>
     );
 }
 
 const estilos = StyleSheet.create({
     contenedor: {
         flex: 1,
+        padding: 32,
         justifyContent: 'center',
+    },
+    heroCard: {
+        rowGap: 24,
+    },
+    heroHeader: {
+        flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#121212',
-        padding: 30,
+        justifyContent: 'space-between',
+        columnGap: 20,
+    },
+    heroCopy: {
+        flex: 1,
     },
     imagen: {
-        width: 200,
-        height: 200,
-        marginBottom: 40,
+        width: 140,
+        height: 140,
+        flexShrink: 0,
+    },
+    badge: {
+        color: Colors.secondary,
+        fontWeight: '600',
+        letterSpacing: 1.4,
+        marginBottom: 10,
+        textTransform: 'uppercase',
     },
     titulo: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#ffffff',
-        textAlign: 'center',
+        fontSize: 28,
+        fontWeight: '800',
+        color: Colors.textPrimary,
         marginBottom: 10,
     },
     subtitulo: {
+        fontSize: 15,
+        color: Colors.textSecondary,
+        lineHeight: 22,
+        marginBottom: 6,
+    },
+    featureList: {
+        rowGap: 14,
+    },
+    featureItem: {
+        flexDirection: 'row',
+        columnGap: 12,
+        alignItems: 'center',
+    },
+    featureText: {
+        color: Colors.textSecondary,
+        flex: 1,
         fontSize: 14,
-        color: '#cccccc',
-        textAlign: 'center',
-        marginBottom: 30,
+        lineHeight: 20,
     },
-    boton: {
-        backgroundColor: '#9C27B0',
-        paddingVertical: 14,
-        paddingHorizontal: 40,
-        borderRadius: 10,
+    secondaryAction: {
+        alignItems: 'center',
     },
-    textoBoton: {
-        color: '#ffffff',
-        fontSize: 16,
-        fontWeight: 'bold',
-        textAlign: 'center',
+    secondaryText: {
+        color: Colors.textSecondary,
+        textDecorationLine: 'underline',
     },
 });

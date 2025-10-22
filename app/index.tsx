@@ -1,6 +1,12 @@
+import { Ionicons } from '@expo/vector-icons';
+import { StatusBar } from 'expo-status-bar';
 import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+import { GradientBackground } from '../components/ui/GradientBackground';
+import { GlassCard } from '../components/ui/GlassCard';
+import { PrimaryButton } from '../components/ui/PrimaryButton';
 import { Colors } from '../constants/Colors';
 import { useAuth } from '../hooks/useAuth';
 
@@ -27,36 +33,118 @@ export default function WelcomeScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <Image source={require('../assets/images/money.png')} style={styles.image} />
-      <TouchableOpacity style={styles.button} onPress={() => router.push('/(auth)/iniciar-sesion')}>
-        <Text style={styles.buttonText}>COMENZAR</Text>
-      </TouchableOpacity>
-    </View>
+    <GradientBackground>
+      <StatusBar style="light" />
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <View style={styles.heroCopy}>
+            <Text style={styles.badge}>Mora Finance</Text>
+            <Text style={styles.title}>Gestiona tu dinero con elegancia</Text>
+            <Text style={styles.subtitle}>
+              Visualiza tus metas, crea billeteras inteligentes y mantén el control total de tus finanzas
+              personales.
+            </Text>
+          </View>
+          <Image source={require('../assets/images/money.png')} style={styles.image} />
+        </View>
+
+        <GlassCard style={styles.card}>
+          <Text style={styles.cardTitle}>Un nuevo estándar para tus finanzas</Text>
+          <View style={styles.featureList}>
+            <View style={styles.featureItem}>
+              <Ionicons name="sparkles" size={20} color={Colors.secondary} />
+              <Text style={styles.featureText}>Paneles vibrantes con información en tiempo real.</Text>
+            </View>
+            <View style={styles.featureItem}>
+              <Ionicons name="wallet" size={20} color={Colors.secondary} />
+              <Text style={styles.featureText}>Organiza billeteras personales, familiares o de proyectos.</Text>
+            </View>
+            <View style={styles.featureItem}>
+              <Ionicons name="stats-chart" size={20} color={Colors.secondary} />
+              <Text style={styles.featureText}>Estadísticas hermosas que convierten números en decisiones.</Text>
+            </View>
+          </View>
+
+          <PrimaryButton label="Comenzar" onPress={() => router.push('/(auth)/iniciar-sesion')} />
+          <TouchableOpacity onPress={() => router.push('/(auth)/registro')} style={styles.secondaryAction}>
+            <Text style={styles.secondaryText}>¿Aún no tienes cuenta? Regístrate gratis</Text>
+          </TouchableOpacity>
+        </GlassCard>
+      </View>
+    </GradientBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
-    justifyContent: 'center',
+    paddingTop: 70,
+    paddingBottom: 60,
+    paddingHorizontal: 24,
+  },
+  header: {
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 32,
+    columnGap: 20,
+  },
+  badge: {
+    color: Colors.secondary,
+    fontWeight: '600',
+    letterSpacing: 1.5,
+    textTransform: 'uppercase',
+    marginBottom: 12,
+  },
+  title: {
+    fontSize: 32,
+    lineHeight: 40,
+    fontWeight: '800',
+    color: Colors.textPrimary,
+    marginBottom: 12,
+  },
+  subtitle: {
+    color: Colors.textSecondary,
+    fontSize: 16,
+    lineHeight: 24,
+    maxWidth: 320,
   },
   image: {
-    width: 200,
-    height: 200,
-    marginBottom: 50,
+    width: 160,
+    height: 160,
+    flexShrink: 0,
   },
-  button: {
-    backgroundColor: Colors.primary,
-    paddingVertical: 15,
-    paddingHorizontal: 50,
-    borderRadius: 10,
+  heroCopy: {
+    flex: 1,
   },
-  buttonText: {
-    color: Colors.white,
-    fontSize: 18,
-    fontWeight: 'bold',
+  card: {
+    rowGap: 20,
+  },
+  cardTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: Colors.textPrimary,
+  },
+  featureList: {
+    rowGap: 12,
+  },
+  featureItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    columnGap: 12,
+  },
+  featureText: {
+    color: Colors.textSecondary,
+    flex: 1,
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  secondaryAction: {
+    alignItems: 'center',
+  },
+  secondaryText: {
+    color: Colors.textSecondary,
+    fontSize: 14,
+    textDecorationLine: 'underline',
   },
 });
