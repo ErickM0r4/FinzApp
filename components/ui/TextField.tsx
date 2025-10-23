@@ -17,7 +17,7 @@ export const TextField = forwardRef<TextInput, Props>(function TextField(
   const hasValue = value != null && String(value).length > 0;
 
   return (
-    <View style={style}>
+  <View style={style as any}>
       {label && (
         <Text style={[styles.label, (isFocused || hasValue) && styles.labelActive]}>
           {label}
@@ -39,10 +39,16 @@ export const TextField = forwardRef<TextInput, Props>(function TextField(
           {...rest}
           style={[styles.input, multiline && styles.inputMultiline]}
           onFocus={(event) => {
+            // Log focus events for debugging keyboard flicker
+            // eslint-disable-next-line no-console
+            console.log('TextField onFocus', { label });
             setIsFocused(true);
             onFocus?.(event);
           }}
           onBlur={(event) => {
+            // Log blur events for debugging keyboard flicker
+            // eslint-disable-next-line no-console
+            console.log('TextField onBlur', { label });
             setIsFocused(false);
             onBlur?.(event);
           }}
@@ -79,11 +85,7 @@ const styles = StyleSheet.create({
   },
   wrapperFocused: {
     borderColor: Colors.primary,
-    shadowColor: Colors.primary,
-    shadowOpacity: 0.35,
-    shadowOffset: { width: 0, height: 12 },
-    shadowRadius: 20,
-    elevation: 6,
+    // Reduced visual effect to avoid layout shifts that can affect keyboard behaviour on Android
   },
   wrapperError: {
     borderColor: Colors.red,

@@ -1,8 +1,8 @@
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, Alert, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { actualizarUsuario, Usuario } from '../../database';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -10,8 +10,14 @@ export default function EditarPerfil() {
     const router = useRouter();
     const { usuario, guardarSesion } = useAuth();
 
+    console.log('Render EditarPerfil');
+
     const [nombre, setNombre] = useState('');
     const [apellido, setApellido] = useState('');
+    const nombreRef = useRef(nombre);
+    const apellidoRef = useRef(apellido);
+    const debounceNombre = useRef<number | null>(null);
+    const debounceApellido = useRef<number | null>(null);
     const [cargando, setCargando] = useState(false);
 
     // Cargar datos del usuario al inicio
@@ -57,6 +63,7 @@ export default function EditarPerfil() {
     };
 
     return (
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <View style={estilos.contenedor}>
             <StatusBar style="light" />
             <TouchableOpacity onPress={() => router.back()} style={estilos.retroceso}>
@@ -78,8 +85,18 @@ export default function EditarPerfil() {
                 placeholderTextColor="#aaa"
                 style={estilos.input}
                 value={nombre}
-                onChangeText={setNombre}
+                onChangeText={(text) => {
+                    nombreRef.current = text;
+                    if (debounceNombre.current) clearTimeout(debounceNombre.current as any);
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    debounceNombre.current = setTimeout(() => {
+                        setNombre(nombreRef.current);
+                        debounceNombre.current = null;
+                    }, 150) as any;
+                }}
                 editable={!cargando}
+                onFocus={() => console.log('Perfil Nombre onFocus')}
+                onBlur={() => console.log('Perfil Nombre onBlur')}
             />
 
             <Text style={estilos.etiqueta}>Apellido</Text>
@@ -88,8 +105,18 @@ export default function EditarPerfil() {
                 placeholderTextColor="#aaa"
                 style={estilos.input}
                 value={apellido}
-                onChangeText={setApellido}
+                onChangeText={(text) => {
+                    apellidoRef.current = text;
+                    if (debounceApellido.current) clearTimeout(debounceApellido.current as any);
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    debounceApellido.current = setTimeout(() => {
+                        setApellido(apellidoRef.current);
+                        debounceApellido.current = null;
+                    }, 150) as any;
+                }}
                 editable={!cargando}
+                onFocus={() => console.log('Perfil Apellido onFocus')}
+                onBlur={() => console.log('Perfil Apellido onBlur')}
             />
 
             <TouchableOpacity 
@@ -104,6 +131,7 @@ export default function EditarPerfil() {
                 )}
             </TouchableOpacity>
         </View>
+        </KeyboardAvoidingView>
     );
 }
 

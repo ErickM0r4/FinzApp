@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Alert, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Billetera, crearTransaccion, obtenerBilleteras } from '../../database';
 import { useAuth } from '../../hooks/useAuth';
@@ -10,12 +10,18 @@ import { useAuth } from '../../hooks/useAuth';
 export default function NuevaTransaccion() {
     const router = useRouter();
     const { usuario } = useAuth();
+    console.log('Render NuevaTransaccion');
 
     const [tipo, setTipo] = useState('');
     const [billeteraId, setBilleteraId] = useState('');
     const [categoria, setCategoria] = useState('');
     const [monto, setMonto] = useState('');
     const [descripcion, setDescripcion] = useState('');
+    // refs para debounce y valores locales (evita re-renders por cada tecla)
+    const montoRef = useRef(monto);
+    const descripcionRef = useRef(descripcion);
+    const debounceMonto = useRef<number | null>(null);
+    const debounceDescripcion = useRef<number | null>(null);
     const [billeteras, setBilleteras] = useState<Billetera[]>([]);
     const [cargando, setCargando] = useState(false);
 
@@ -106,7 +112,7 @@ export default function NuevaTransaccion() {
     };
 
     return (
-        <ScrollView contentContainerStyle={estilos.contenedor} keyboardShouldPersistTaps="handled">
+        <ScrollView contentContainerStyle={estilos.contenedor} keyboardShouldPersistTaps="always">
             <StatusBar style="light" />
 
             {/* Botón retroceso */}
@@ -176,7 +182,18 @@ export default function NuevaTransaccion() {
                 style={estilos.input}
                 keyboardType="numeric"
                 value={monto}
-                onChangeText={setMonto}
+                onChangeText={(text) => {
+                    // actualizar ref inmediatamente y hacer debounce del setState
+                    montoRef.current = text;
+                    if (debounceMonto.current) clearTimeout(debounceMonto.current as any);
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    debounceMonto.current = setTimeout(() => {
+                        setMonto(montoRef.current);
+                        debounceMonto.current = null;
+                    }, 150) as any;
+                }}
+                onFocus={() => console.log('Monto onFocus')}
+                onBlur={() => console.log('Monto onBlur')}
             />
 
             <Text style={estilos.etiqueta}>Descripción (Opcional)</Text>
@@ -187,7 +204,17 @@ export default function NuevaTransaccion() {
                 multiline
                 numberOfLines={4}
                 value={descripcion}
-                onChangeText={setDescripcion}
+                onChangeText={(text) => {
+                    descripcionRef.current = text;
+                    if (debounceDescripcion.current) clearTimeout(debounceDescripcion.current as any);
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    debounceDescripcion.current = setTimeout(() => {
+                        setDescripcion(descripcionRef.current);
+                        debounceDescripcion.current = null;
+                    }, 200) as any;
+                }}
+                onFocus={() => console.log('Descripcion onFocus')}
+                onBlur={() => console.log('Descripcion onBlur')}
             />
 
             <TouchableOpacity 
