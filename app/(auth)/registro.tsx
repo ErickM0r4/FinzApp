@@ -2,7 +2,16 @@ import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+    Alert,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 
 import { GradientBackground } from '../../components/ui/GradientBackground';
 import { GlassCard } from '../../components/ui/GlassCard';
@@ -85,11 +94,22 @@ export default function Registro() {
     return (
         <GradientBackground>
             <StatusBar style="light" />
-            <View style={estilos.contenedor}>
-                <GlassCard style={estilos.card}>
-                    <View style={estilos.header}>
-                        <View>
-                            <Text style={estilos.etiqueta}>Crea tu perfil</Text>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={estilos.keyboardAvoider}
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
+            >
+                <ScrollView
+                    contentContainerStyle={estilos.scrollContent}
+                    keyboardShouldPersistTaps="handled"
+                    keyboardDismissMode="on-drag"
+                    showsVerticalScrollIndicator={false}
+                >
+                    <View style={estilos.contenedor}>
+                        <GlassCard style={estilos.card}>
+                            <View style={estilos.header}>
+                                <View>
+                                    <Text style={estilos.etiqueta}>Crea tu perfil</Text>
                             <Text style={estilos.titulo}>Registro</Text>
                             <Text style={estilos.subtitulo}>Diseñado para ayudarte a mantener el control sin esfuerzo.</Text>
                         </View>
@@ -135,17 +155,26 @@ export default function Registro() {
                             <Text style={estilos.link}>Iniciar sesión</Text>
                         </TouchableOpacity>
                     </View>
-                </GlassCard>
-            </View>
+                        </GlassCard>
+                    </View>
+                </ScrollView>
+            </KeyboardAvoidingView>
         </GradientBackground>
     );
 }
 
 const estilos = StyleSheet.create({
+    keyboardAvoider: {
+        flex: 1,
+    },
     contenedor: {
         flex: 1,
         padding: 32,
         justifyContent: 'center',
+        paddingBottom: 48,
+    },
+    scrollContent: {
+        flexGrow: 1,
     },
     card: {
         rowGap: 18,
