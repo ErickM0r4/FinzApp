@@ -1,8 +1,9 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Entypo, Ionicons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, Image, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { actualizarBilletera, Billetera, obtenerBilleteras } from '../../database';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -15,6 +16,8 @@ export default function EditarBilletera() {
     const [cargando, setCargando] = useState(true);
     const [guardando, setGuardando] = useState(false);
     const [billetera, setBilletera] = useState<Billetera | null>(null);
+    const [imagen, setImagen] = useState<string | null>(null);
+    const [imagenCambiada, setImagenCambiada] = useState(false);
 
     useEffect(() => {
         if (usuario) {
@@ -40,12 +43,30 @@ export default function EditarBilletera() {
                 console.log('Billetera encontrada:', billeteraEncontrada.nombre);
                 setBilletera(billeteraEncontrada);
                 setNombre(billeteraEncontrada.nombre);
+                // Cargar imagen si existe
+                if ((billeteraEncontrada as any).imagen) {
+                    setImagen((billeteraEncontrada as any).imagen);
+                }
             } else {
                 console.error('Billetera no encontrada con id:', billeteraId);
                 Alert.alert('Error', 'No se encontró la billetera especificada.');
             }
             setCargando(false);
         });
+    };
+
+    const seleccionarImagen = async () => {
+        const resultado = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 0.7,
+        });
+
+        if (!resultado.canceled && resultado.assets.length > 0) {
+            setImagen(resultado.assets[0].uri);
+            setImagenCambiada(true);
+        }
     };
 
     const actualizar = () => {
@@ -113,6 +134,18 @@ export default function EditarBilletera() {
             </TouchableOpacity>
 
             <Text style={estilos.titulo}>Editar Billetera</Text>
+
+            <Text style={estilos.etiqueta}>Imagen de la billetera</Text>
+            <TouchableOpacity style={estilos.subirImagen} onPress={seleccionarImagen}>
+                {imagen ? (
+                    <Image source={{ uri: imagen }} style={estilos.imagenPrevia} />
+                ) : (
+                    <>
+                        <Entypo name="upload" size={28} color="#aaa" />
+                        <Text style={estilos.textoSubir}>Cambiar imagen</Text>
+                    </>
+                )}
+            </TouchableOpacity>
 
             <Text style={estilos.etiqueta}>Nombre de la billetera</Text>
             <TextInput
@@ -249,5 +282,28 @@ const estilos = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         fontWeight: '600',
+    },
+    subirImagen: {
+        height: 140,
+        borderWidth: 2,
+        borderColor: '#555',
+        borderStyle: 'dashed',
+        borderRadius: 14,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 24,
+        backgroundColor: '#1a1a1a',
+    },
+    textoSubir: {
+        color: '#aaa',
+        marginTop: 10,
+        fontSize: 14,
+        fontWeight: '500',
+    },
+    imagenPrevia: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 12,
+        resizeMode: 'cover',
     },
 });

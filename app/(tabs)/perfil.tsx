@@ -3,8 +3,8 @@ import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { GradientBackground } from '../../components/ui/GradientBackground';
 import { GlassCard } from '../../components/ui/GlassCard';
+import { GradientBackground } from '../../components/ui/GradientBackground';
 import { PrimaryButton } from '../../components/ui/PrimaryButton';
 import { Colors } from '../../constants/Colors';
 import { useAuth } from '../../hooks/useAuth';

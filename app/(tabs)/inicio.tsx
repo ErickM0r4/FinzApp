@@ -5,8 +5,8 @@ import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { GradientBackground } from '../../components/ui/GradientBackground';
 import { GlassCard } from '../../components/ui/GlassCard';
+import { GradientBackground } from '../../components/ui/GradientBackground';
 import { Colors } from '../../constants/Colors';
 import { Billetera, obtenerBilleteras, obtenerTransacciones, Transaccion } from '../../database';
 import { useAuth } from '../../hooks/useAuth';
