@@ -61,7 +61,7 @@ export default function EstadisticasUsuario() {
     }
 
     return (
-        <ScrollView style={estilos.contenedor}>
+        <ScrollView contentContainerStyle={estilos.contenedor} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
             <StatusBar style="light" />
             
             <TouchableOpacity onPress={() => router.back()} style={estilos.retroceso}>
@@ -199,10 +199,11 @@ export default function EstadisticasUsuario() {
 
 const estilos = StyleSheet.create({
     contenedor: {
-        flex: 1,
         backgroundColor: '#121212',
         padding: 20,
         paddingTop: 60,
+        // minHeight ensures the content container can grow and allows scrolling on smaller screens
+        minHeight: '100%'
     },
     contenedorCargando: {
         justifyContent: 'center',

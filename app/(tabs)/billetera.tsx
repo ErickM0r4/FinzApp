@@ -5,8 +5,8 @@ import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { GradientBackground } from '../../components/ui/GradientBackground';
 import { GlassCard } from '../../components/ui/GlassCard';
+import { GradientBackground } from '../../components/ui/GradientBackground';
 import { PrimaryButton } from '../../components/ui/PrimaryButton';
 import { Colors } from '../../constants/Colors';
 import { Billetera, obtenerBilleteras } from '../../database';
@@ -104,7 +104,7 @@ export default function BilleteraScreen() {
                             >
                                 <View style={estilos.iconoWrapper}>
                                     <Image
-                                        source={require('../../assets/images/money.png')}
+                                        source={require('../../assets/images/icon.png')}
                                         style={estilos.icono}
                                     />
                                 </View>

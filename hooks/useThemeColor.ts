@@ -16,6 +16,11 @@ export function useThemeColor(
   if (colorFromProps) {
     return colorFromProps;
   } else {
-    return Colors[colorName];
+    // Colors may contain gradients (string[]). For places that expect a
+    // single ColorValue (e.g. backgroundColor / color) return a string.
+    // If a gradient array is provided, use the first color as a sensible
+    // default.
+    const c = Colors[colorName] as string | string[];
+    return Array.isArray(c) ? c[0] : c;
   }
 }

@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
+import { sanitizar } from '../lib/validators';
 
 export interface Usuario {
   id: number;
@@ -8,52 +9,131 @@ export interface Usuario {
   correo: string;
 }
 
-export const useAuth = () => {
-  const [usuario, setUsuario] = useState<Usuario | null>(null);
-  const [cargando, setCargando] = useState(true);
+interface AuthState {
+  usuario: Usuario | null;
+  cargando: boolean;
+  error: string | null;
+}
 
-  // Verificar si hay una sesión guardada al iniciar
+/**
+ * Custom hook for authentication management
+ * Handles user session persistence and validation
+ */
+export const useAuth = () => {
+  const [state, setState] = useState<AuthState>({
+    usuario: null,
+    cargando: true,
+    error: null
+  });
+
+  // Verify saved session on app initialization
   useEffect(() => {
     verificarSesion();
   }, []);
 
+  /**
+   * Verify if user has an active session
+   */
   const verificarSesion = async () => {
     try {
+      setState(prev => ({ ...prev, cargando: true, error: null }));
+      
       const sesionGuardada = await AsyncStorage.getItem('sesion_usuario');
+      
       if (sesionGuardada) {
-        const usuario = JSON.parse(sesionGuardada);
-        setUsuario(usuario);
+        const usuario = JSON.parse(sesionGuardada) as Usuario;
+        
+        // Validate user object structure
+        if (usuario.id && usuario.nombre && usuario.correo) {
+          setState(prev => ({ 
+            ...prev, 
+            usuario,
+            cargando: false 
+          }));
+        } else {
+          // Invalid session data, clear it
+          await AsyncStorage.removeItem('sesion_usuario');
+          setState(prev => ({ ...prev, cargando: false }));
+        }
+      } else {
+        setState(prev => ({ ...prev, cargando: false }));
       }
     } catch (error) {
-      console.error('Error al verificar sesión:', error);
-    } finally {
-      setCargando(false);
+      const mensaje = error instanceof Error ? error.message : 'Error desconocido';
+      setState(prev => ({ 
+        ...prev, 
+        error: mensaje,
+        cargando: false 
+      }));
     }
   };
 
-  const guardarSesion = async (usuario: Usuario) => {
+  /**
+   * Save user session (with validation)
+   */
+  const guardarSesion = async (usuario: Usuario): Promise<boolean> => {
     try {
-      await AsyncStorage.setItem('sesion_usuario', JSON.stringify(usuario));
-      setUsuario(usuario);
+      // Validate user object
+      if (!usuario.id || !usuario.nombre || !usuario.correo) {
+        throw new Error('Datos de usuario incompletos');
+      }
+
+      // Sanitize before saving
+      const usuarioSanitizado: Usuario = {
+        id: usuario.id,
+        nombre: sanitizar(usuario.nombre),
+        apellido: sanitizar(usuario.apellido),
+        correo: usuario.correo // Already validated at DB level
+      };
+
+      await AsyncStorage.setItem('sesion_usuario', JSON.stringify(usuarioSanitizado));
+      setState(prev => ({ 
+        ...prev, 
+        usuario: usuarioSanitizado,
+        error: null 
+      }));
+      return true;
     } catch (error) {
-      console.error('Error al guardar sesión:', error);
+      const mensaje = error instanceof Error ? error.message : 'Error al guardar sesión';
+      setState(prev => ({ ...prev, error: mensaje }));
+      return false;
     }
   };
 
-  const cerrarSesion = async () => {
+  /**
+   * Clear user session
+   */
+  const cerrarSesion = async (): Promise<boolean> => {
     try {
       await AsyncStorage.removeItem('sesion_usuario');
-      setUsuario(null);
+      setState({
+        usuario: null,
+        cargando: false,
+        error: null
+      });
+      return true;
     } catch (error) {
-      console.error('Error al cerrar sesión:', error);
+      const mensaje = error instanceof Error ? error.message : 'Error al cerrar sesión';
+      setState(prev => ({ ...prev, error: mensaje }));
+      return false;
     }
+  };
+
+  /**
+   * Clear error state
+   */
+  const limpiarError = () => {
+    setState(prev => ({ ...prev, error: null }));
   };
 
   return {
-    usuario,
-    cargando,
+    usuario: state.usuario,
+    cargando: state.cargando,
+    error: state.error,
     guardarSesion,
     cerrarSesion,
-    estaAutenticado: !!usuario
+    verificarSesion,
+    limpiarError,
+    estaAutenticado: !!state.usuario
   };
 };

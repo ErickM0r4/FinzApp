@@ -1,10 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
-import { StatusBar } from 'expo-status-bar';
 import { useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { GradientBackground } from '../../components/ui/GradientBackground';
 import { GlassCard } from '../../components/ui/GlassCard';
+import { GradientBackground } from '../../components/ui/GradientBackground';
 import { PrimaryButton } from '../../components/ui/PrimaryButton';
 import { Colors } from '../../constants/Colors';
 
@@ -29,7 +29,7 @@ export default function Bienvenida() {
                             </Text>
                         </View>
                         <Image
-                            source={require('../../assets/images/money.png')}
+                            source={require('../../assets/images/icon.png')}
                             style={estilos.imagen}
                             resizeMode="contain"
                         />

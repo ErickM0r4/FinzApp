@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Dimensions, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { BarChart } from 'react-native-chart-kit';
+import ChartCard from '../../components/ChartCard';
 import { Billetera, obtenerBilleteras, obtenerTransacciones, obtenerTransaccionesPorBilletera, Transaccion } from '../../database';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -297,12 +297,18 @@ export default function Estadisticas() {
     }
 
     return (
-        <View style={estilos.contenedor}>
-            <StatusBar style="light" />
-            <Text style={estilos.titulo}>Estadísticas</Text>
+        <FlatList
+            data={transaccionesConEstilo}
+            keyExtractor={(item) => item.id.toString()}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={estilos.contenedor}
+            ListHeaderComponent={() => (
+                <>
+                    <StatusBar style="light" />
+                    <Text style={estilos.titulo}>Estadísticas</Text>
 
-            {/* Selector de Billetera */}
-            <View style={estilos.selectorBilletera}>
+                    {/* Selector de Billetera */}
+                    <View style={estilos.selectorBilletera}>
                 <Text style={estilos.etiquetaSelector}>Billetera:</Text>
                 <View style={estilos.pickerContainer}>
                     {cargandoBilleteras ? (
@@ -369,84 +375,67 @@ export default function Estadisticas() {
                 </TouchableOpacity>
             </View>
 
-            {/* Gráfica */}
-            <BarChart
-                data={{
-                    labels: datosGrafico.labels,
-                    datasets: [{ data: datosGrafico[filtro] }],
-                }}
-                width={screenWidth - 40}
-                height={220}
-                fromZero
-                showValuesOnTopOfBars
-                yAxisLabel=""
-                yAxisSuffix=""
-                chartConfig={{
-                    backgroundGradientFrom: '#121212',
-                    backgroundGradientTo: '#121212',
-                    color: () => (filtro === 'ingresos' ? '#4caf50' : '#f44336'),
-                    labelColor: () => '#fff',
-                }}
-                style={{ marginVertical: 16, borderRadius: 16 }}
-            />
+                    {/* Gráfica */}
+                    <ChartCard
+                        labels={datosGrafico.labels}
+                        data={datosGrafico[filtro]}
+                        color={filtro === 'ingresos' ? '#4caf50' : '#f44336'}
+                        height={220}
+                    />
 
-            {/* Lista de transacciones */}
-            <Text style={estilos.subtitulo}>Transacciones Recientes</Text>
-            {transaccionesConEstilo.length === 0 ? (
+                    {/* Lista de transacciones header */}
+                    <Text style={estilos.subtitulo}>Transacciones Recientes</Text>
+                </>
+            )}
+            renderItem={({ item }) => (
+                <TouchableOpacity 
+                    style={estilos.transaccion}
+                    activeOpacity={0.6}
+                    onPress={() => {
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                        console.log('🔄 Navegando desde estadísticas a editar transacción:', item.id);
+                        router.push({
+                            pathname: '/(tabs)/editar-transaccion' as any,
+                            params: {
+                                id: item.id.toString(),
+                                categoria: item.categoria,
+                                descripcion: item.descripcion,
+                                monto: item.monto.toString(),
+                                fecha: item.fecha,
+                                tipo: item.tipo,
+                                billeteraId: item.billetera_id?.toString() || '',
+                            },
+                        });
+                    }}
+                >
+                    <View style={[estilos.icono, { backgroundColor: item.color }]}> 
+                        {item.icono}
+                    </View>
+                    <View style={{ flex: 1 }}>
+                        <Text style={estilos.categoria}>{item.categoria}</Text>
+                        <Text style={estilos.descripcion}>{item.descripcion}</Text>
+                    </View>
+                    <View style={estilos.infoDerecha}>
+                        <Text
+                            style={[
+                                estilos.monto,
+                                { color: item.tipo === 'ingreso' ? '#4caf50' : '#f44336' },
+                            ]}
+                        >
+                            {item.tipo === 'ingreso' ? `+$${item.monto}` : `-$${item.monto}`}
+                        </Text>
+                        <Text style={estilos.fecha}>{item.fechaFormateada}</Text>
+                    </View>
+                </TouchableOpacity>
+            )}
+            ListEmptyComponent={() => (
                 <View style={estilos.estadoVacio}>
                     <Text style={estilos.textoVacio}>No hay transacciones</Text>
                     <Text style={estilos.subtextoVacio}>Las transacciones aparecerán aquí</Text>
                 </View>
-            ) : (
-                <FlatList
-                    data={transaccionesConEstilo}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity 
-                            style={estilos.transaccion}
-                            activeOpacity={0.6}
-                            onPress={() => {
-                                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                                console.log('🔄 Navegando desde estadísticas a editar transacción:', item.id);
-                                router.push({
-                                    pathname: '/(tabs)/editar-transaccion' as any,
-                                    params: {
-                                        id: item.id.toString(),
-                                        categoria: item.categoria,
-                                        descripcion: item.descripcion,
-                                        monto: item.monto.toString(),
-                                        fecha: item.fecha,
-                                        tipo: item.tipo,
-                                        billeteraId: item.billetera_id?.toString() || '',
-                                    },
-                                });
-                            }}
-                        >
-                            <View style={[estilos.icono, { backgroundColor: item.color }]}>
-                                {item.icono}
-                            </View>
-                            <View style={{ flex: 1 }}>
-                                <Text style={estilos.categoria}>{item.categoria}</Text>
-                                <Text style={estilos.descripcion}>{item.descripcion}</Text>
-                            </View>
-                            <View style={estilos.infoDerecha}>
-                                <Text
-                                    style={[
-                                        estilos.monto,
-                                        { color: item.tipo === 'ingreso' ? '#4caf50' : '#f44336' },
-                                    ]}
-                                >
-                                    {item.tipo === 'ingreso' ? `+$${item.monto}` : `-$${item.monto}`}
-                                </Text>
-                                <Text style={estilos.fecha}>{item.fechaFormateada}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    )}
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ paddingBottom: 20 }}
-                />
             )}
-        </View>
+            ListFooterComponent={() => <View style={{ height: 40 }} />}
+        />
     );
 }
 

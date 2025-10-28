@@ -1,9 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
-import { StatusBar } from 'expo-status-bar';
 import { useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import {
-    Alert,
     KeyboardAvoidingView,
     Platform,
     ScrollView,
@@ -13,13 +12,15 @@ import {
     View,
 } from 'react-native';
 
-import { GradientBackground } from '../../components/ui/GradientBackground';
 import { GlassCard } from '../../components/ui/GlassCard';
+import { GradientBackground } from '../../components/ui/GradientBackground';
 import { PrimaryButton } from '../../components/ui/PrimaryButton';
 import { TextField } from '../../components/ui/TextField';
 import { Colors } from '../../constants/Colors';
 import { iniciarSesion, Usuario } from '../../database';
 import { useAuth } from '../../hooks/useAuth';
+import { log } from '../../lib/logger';
+import { validarCredencialesLogin } from '../../lib/validators';
 
 export default function IniciarSesion() {
     const router = useRouter();
@@ -28,50 +29,48 @@ export default function IniciarSesion() {
     const [correo, setCorreo] = useState('');
     const [contrasena, setContrasena] = useState('');
     const [cargando, setCargando] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const manejarInicioSesion = () => {
-        console.log('Iniciando sesión con:', correo, contrasena);
+        setError(null);
 
-        if (!correo || !contrasena) {
-            Alert.alert('Error', 'Por favor completa todos los campos.');
+        // Validate credentials
+        const validacion = validarCredencialesLogin(correo, contrasena);
+        if (!validacion.valido) {
+            const mensaje = validacion.errores.join('\n');
+            setError(mensaje);
+            log.warn('Login validation failed', { errores: validacion.errores });
             return;
         }
 
         setCargando(true);
+        log.info('Attempting login', { correo });
 
         // Iniciar sesión con SQLite
         iniciarSesion(correo, contrasena, async (exito: boolean, mensaje: string, usuario: Usuario | null) => {
             setCargando(false);
             
             if (exito && usuario) {
-                console.log('Inicio de sesión exitoso');
+                log.info('Login successful', { usuario: usuario.correo });
                 
-                // Mostrar mensaje de bienvenida
-                Alert.alert(
-                    '¡Bienvenido!', 
-                    `Hola ${usuario.nombre}!\n\nHas iniciado sesión correctamente.`, 
-                    [
-                        { 
-                            text: 'Continuar', 
-                            onPress: async () => {
-                                // Guardar sesión del usuario
-                                await guardarSesion({
-                                    id: usuario.id,
-                                    nombre: usuario.nombre,
-                                    apellido: usuario.apellido,
-                                    correo: usuario.correo
-                                });
-                                
-                                // Redirigir a la app principal
-                                router.replace('/(tabs)/inicio' as any);
-                            },
-                            style: 'default'
-                        }
-                    ]
-                );
+                // Guardar sesión del usuario
+                const sesionGuardada = await guardarSesion({
+                    id: usuario.id,
+                    nombre: usuario.nombre,
+                    apellido: usuario.apellido,
+                    correo: usuario.correo
+                });
+
+                if (sesionGuardada) {
+                    // Redirigir a la app principal
+                    router.replace('/(tabs)/inicio' as any);
+                } else {
+                    setError('Error al guardar la sesión. Intenta de nuevo.');
+                    log.error('Failed to save session', { usuario: usuario.correo });
+                }
             } else {
-                console.log('Error en inicio de sesión:', mensaje);
-                Alert.alert('Error de Acceso', mensaje);
+                log.warn('Login failed', { mensaje });
+                setError(mensaje || 'Error desconocido. Intenta de nuevo.');
             }
         });
     };
@@ -103,30 +102,44 @@ export default function IniciarSesion() {
                         </View>
                     </View>
 
+                    {/* Error message display */}
+                    {error && (
+                        <View style={estilos.errorContainer}>
+                            <Ionicons name="alert-circle" size={18} color="#FF5722" />
+                            <Text style={estilos.errorText}>{error}</Text>
+                        </View>
+                    )}
+
                     <TextField
                         label="Correo electrónico"
                         placeholder="ejemplo@email.com"
                         keyboardType="email-address"
                         autoCapitalize="none"
                         value={correo}
-                        onChangeText={setCorreo}
+                        onChangeText={(text) => {
+                            setCorreo(text);
+                            setError(null);
+                        }}
                     />
                     <TextField
                         label="Contraseña"
                         placeholder="Ingresa tu contraseña"
                         secureTextEntry
                         value={contrasena}
-                        onChangeText={setContrasena}
+                        onChangeText={(text) => {
+                            setContrasena(text);
+                            setError(null);
+                        }}
                     />
 
-                    <TouchableOpacity onPress={() => Alert.alert('Recuperar contraseña', 'Pronto podrás restablecerla desde la aplicación.') }>
+                    <TouchableOpacity onPress={() => setError('La recuperación de contraseña estará disponible pronto.')}>
                         <Text style={estilos.olvido}>¿Olvidaste tu contraseña?</Text>
                     </TouchableOpacity>
 
                     <PrimaryButton
                         label={cargando ? 'Iniciando...' : 'Iniciar sesión'}
                         onPress={manejarInicioSesion}
-                        disabled={cargando}
+                        disabled={cargando || !correo || !contrasena}
                     />
 
                     <View style={estilos.footer}>
@@ -214,5 +227,23 @@ const estilos = StyleSheet.create({
         shadowOffset: { width: 0, height: 12 },
         shadowRadius: 20,
         elevation: 10,
+    },
+    errorContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'rgba(255, 87, 34, 0.15)',
+        borderLeftWidth: 3,
+        borderLeftColor: '#FF5722',
+        borderRadius: 8,
+        padding: 12,
+        marginBottom: 16,
+        gap: 10,
+    },
+    errorText: {
+        color: '#FF5722',
+        fontSize: 13,
+        fontWeight: '500',
+        flex: 1,
+        lineHeight: 18,
     },
 });

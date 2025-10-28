@@ -7,11 +7,11 @@
     "icon": "./assets/images/icon.png",
     "scheme": "appgastos",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "package": "com.danut.appgastos",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -24,6 +24,16 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "gradleProperties": {
+              "newArchEnabled": "true"
+            }
+          }
+        }
+      ],
       "expo-router",
       [
         "expo-splash-screen",
@@ -53,6 +63,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "318cd895-17a4-40bf-b7dc-6dc9c4f2d0cc"
+      }
     }
   }
 }

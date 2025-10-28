@@ -1,11 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
-import { StatusBar } from 'expo-status-bar';
 import { useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { GradientBackground } from '../components/ui/GradientBackground';
 import { GlassCard } from '../components/ui/GlassCard';
+import { GradientBackground } from '../components/ui/GradientBackground';
 import { PrimaryButton } from '../components/ui/PrimaryButton';
 import { Colors } from '../constants/Colors';
 import { useAuth } from '../hooks/useAuth';
@@ -45,7 +45,7 @@ export default function WelcomeScreen() {
               personales.
             </Text>
           </View>
-          <Image source={require('../assets/images/money.png')} style={styles.image} />
+          <Image source={require('../assets/images/icon.png')} style={styles.image} />
         </View>
 
         <GlassCard style={styles.card}>
