@@ -124,11 +124,18 @@ export default function Estadisticas() {
                 gastos.push(datosHoras[hora].gastos);
             });
         } else if (rangoGrafica === 'semana') {
-            // Últimos 7 días
-            const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
-            for (let i = 6; i >= 0; i--) {
-                const fecha = new Date(hoy.getTime() - i * 24 * 60 * 60 * 1000);
-                labels.push(diasSemana[fecha.getDay()]);
+            // Últimos 7 días (Lunes a Domingo)
+            const diasSemana = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+            
+            // Calcular el lunes de esta semana
+            const diaSemana = hoy.getDay();
+            const diasDesdeMonday = diaSemana === 0 ? -6 : 1 - diaSemana; // Si es domingo (0), retroceder 6 días
+            const primerDiaLunes = new Date(hoy.getTime() + diasDesdeMonday * 24 * 60 * 60 * 1000);
+            
+            // Generar 7 días comenzando desde el lunes
+            for (let i = 0; i < 7; i++) {
+                const fecha = new Date(primerDiaLunes.getTime() + i * 24 * 60 * 60 * 1000);
+                labels.push(diasSemana[i]); // i es 0-6, corresponde exactamente a Mon-Sun
                 const ingresosDia = transacciones.filter(t => t.tipo === 'ingreso' && new Date(t.fecha).toDateString() === fecha.toDateString()).reduce((sum, t) => sum + t.monto, 0);
                 const gastosDia = transacciones.filter(t => t.tipo === 'gasto' && new Date(t.fecha).toDateString() === fecha.toDateString()).reduce((sum, t) => sum + t.monto, 0);
                 ingresos.push(ingresosDia);
