@@ -1,5 +1,6 @@
-Este archivo fue movido a `docs_backup/RECOMMENDED_DEPENDENCIES.md`.
-Consulta la carpeta `docs_backup/` para ver la documentación completa y los archivos originales.
+/**
+ * RECOMMENDED DEPENDENCIES for Further Improvements
+ * 
  * Instala las dependencias de Prioridad 1 inmediatamente.
  * Las demás son opcionales pero altamente recomendadas.
  */
@@ -170,7 +171,7 @@ import LottieView from 'lottie-react-native';
 /*
 import { LinearGradient } from 'expo-linear-gradient';
 
-<LinearGradient colors={['#667eea', '#764ba2']}>
+<LinearGradient colors={['#667eea', '#764ba2']}> 
   {/* content */}
 </LinearGradient>
 */
@@ -236,52 +237,6 @@ RECOMENDACIÓN DE INSTALACIÓN:
 ✅ WEEK 3: jest, react-native-toast-notifications
 ✅ WEEK 4: lodash, dayjs, nanoid
 ✅ WEEK 5+: Animaciones y features opcionales
-*/
-
-// ============================================================================
-// INSTALACIÓN RÁPIDA RECOMENDADA
-// ============================================================================
-
-/*
-Para instalar las dependencias críticas de una vez:
-
-npm install expo-secure-store expo-crypto zod @sentry/react-native
-
-Para dev dependencies:
-npm install --save-dev jest @types/jest @testing-library/react-native babel-jest
-
-Para opcionales útiles:
-npm install lodash dayjs nanoid react-native-toast-notifications
-*/
-
-// ============================================================================
-// NOTAS IMPORTANTES
-// ============================================================================
-
-/*
-1. NO INSTALES TODO DE UNA VEZ
-   - Causa conflictos y aumenta bundle size
-   - Instala cuando las necesites
-
-2. VERIFICA COMPATIBILIDAD
-   - Cada librería tiene requisitos de Expo SDK
-   - Mira package.json antes de instalar
-
-3. PREFIERE EXPO MODULES
-   - Son más compatibles con Expo
-   - Mejor soporte y actualizaciones
-
-4. DOCUMENTACIÓN PRIMERA
-   - Siempre lee la doc antes de usar
-   - Busca ejemplos en GitHub
-
-5. TESTING PRIMERO
-   - Prueba nuevas librerías en rama separada
-   - Asegúrate que no rompan la app
-
-6. MONITOREA BUNDLE SIZE
-   - npm install bundlesize --save-dev
-   - Mantén app <5MB
 */
 
 export {};

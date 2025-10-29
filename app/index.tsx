@@ -38,7 +38,7 @@ export default function WelcomeScreen() {
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.heroCopy}>
-            <Text style={styles.badge}>Mora Finance</Text>
+            <Text style={styles.badge}>FinzApp</Text>
             <Text style={styles.title}>Gestiona tu dinero con elegancia</Text>
             <Text style={styles.subtitle}>
               Visualiza tus metas, crea billeteras inteligentes y mantén el control total de tus finanzas

@@ -1,6 +1,5 @@
-# 🚀 Guía de Implementación de Mejoras
-
-## ✅ Mejoras Implementadas (Completadas)
+# Este archivo fue movido a `docs_backup/GUÍA_IMPLEMENTACION.md`.
+Consulta la carpeta `docs_backup/` para ver la documentación completa y los archivos originales.
 
 ### 1. **Validación Centralizada de Inputs** ✓
 **Archivo:** `lib/validators.ts`

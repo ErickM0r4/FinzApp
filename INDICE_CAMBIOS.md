@@ -1,6 +1,5 @@
-# 📋 ÍNDICE COMPLETO DE MEJORAS
-
-**Fecha:** 28 de Octubre, 2025  
+# Este archivo fue movido a `docs_backup/INDICE_CAMBIOS.md`.
+Consulta la carpeta `docs_backup/` para ver la documentación completa y los archivos originales.
 **Proyecto:** Mora Finance App - FinanzasPersonalesApp  
 **Estado:** ✅ Fase 1 Completada | 🚧 Documentación Finalizada
 

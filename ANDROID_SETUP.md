@@ -1,6 +1,5 @@
-# 🔧 GUÍA - Ejecutar en Android Studio Emulator
-
-## ✅ Pasos para Configurar Android Studio
+Este archivo fue movido a `docs_backup/ANDROID_SETUP.md`.
+Consulta la carpeta `docs_backup/` para ver la documentación completa y los archivos originales.
 
 ### PASO 1: Verificar que Android Studio esté instalado
 ```bash

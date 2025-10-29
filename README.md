@@ -22,88 +22,67 @@ AppGastos permite a los usuarios registrar, visualizar y analizar sus gastos e i
 ---
 
 ## Estructura del Proyecto
-- `app/` Pantallas principales y navegación
-- `components/` Componentes reutilizables
-- `database/` Lógica de base de datos multiplataforma (SQLite)
-- `hooks/` Custom hooks (autenticación, temas, etc.)
-- `assets/` Imágenes y fuentes
+# AppGastos — Resumen y guía rápida
+
+AppGastos es una app Expo/React Native para llevar control de gastos e ingresos con soporte para múltiples billeteras y estadísticas locales.
+
+Archivos de documentación completos se movieron a `docs_backup/` para dejar la raíz limpia. Si necesitas detalles, revisa esa carpeta.
+
+Resumen rápido de uso (Windows / PowerShell):
+
+- Requisitos mínimos:
+  - Node >= 16
+  - npm o yarn
+  - Expo CLI / EAS CLI (opcional para builds)
+  - Android Studio + SDK (para emulador) o dispositivo físico
+
+- Instalar y ejecutar en desarrollo:
+  1. npm install
+  2. npm start
+  3. Usa Expo Go (QR) o presiona "a" para abrir en emulador Android
+
+- Generar APK con EAS (recomendado - cloud):
+  1. npm install -g eas-cli   # o usa npx
+  2. eas login
+  3. eas build -p android --profile production
+  4. Descargar el .apk desde la URL que entrega EAS
+
+- Generar AAB (para Play Store):
+  - Edita `eas.json` -> profile production -> set "android.buildType": "app-bundle"
+  - Luego: eas build -p android --profile production
+
+- Instalar el APK en dispositivo/emulador (PowerShell):
+  - adb install -r path\to\app.apk
+
+Notas importantes:
+- La configuración del package Android está en `app.json` (android.package).
+- Las builds por EAS pueden requerir que inicies sesión con la cuenta que administra el proyecto (eas login / eas whoami).
+- Se crearon copias de seguridad de todos los documentos originales en `docs_backup/`.
+
+Si quieres que deje SOLO un archivo .md en la raíz (el README actual) y reduzca o elimine los pointers restantes, dime y lo dejo exactamente así.
 
 ---
 
-## Funcionalidades Principales
-- **Multi-billetera:** Crea y administra varias billeteras independientes
-- **Transacciones:** Registra ingresos y gastos con categoría, monto, fecha y descripción
-- **Estadísticas:** Visualiza gráficos de gastos/ingresos por billetera o globales
-- **Edición y eliminación:** Modifica o elimina transacciones y billeteras fácilmente
-- **Feedback visual y háptico:** Animaciones y vibración para mejor experiencia
-- **Filtros avanzados:** Filtra por billetera, tipo de transacción y fecha
-- **Manejo de errores:** Mensajes claros y estados de carga amigables
-- **Sin backend:** Todos los datos se almacenan localmente en el dispositivo
+Archivos movidos a `docs_backup/` (resumen):
+- CHECKLIST.md
+- ARQUITECTURA.md
+- RESUMEN_MEJORAS.md
+- RESULTADO_FINAL.md
+- RECOMMENDED_DEPENDENCIES.md
+- MEJORAS_README.md
+- INDICE_CAMBIOS.md
+- GUIA_IMPLEMENTACION.md
+- ANDROID_STUDIO_CONFIG.md
+- ANDROID_SETUP.md
+- ANALISIS_Y_MEJORAS.md
+- api/README.md
 
 ---
 
-## Instalación y Ejecución
-1. Clona el repositorio
-2. Instala dependencias:
-   ```bash
-   npm install
-   ```
-3. Inicia el proyecto:
-   ```bash
-   npm start
-   ```
-4. Escanea el QR con Expo Go o ejecuta en emulador Android/iOS
+Si quieres, puedo:
+1. Reducir todos los .md en la raíz a un solo README (ya preparé este).  
+2. Hacer commit con un mensaje claro (si me das permiso para ejecutar comandos).  
+3. Actualizar `eas.json` para AAB si vas a publicar en Play.
 
----
-
-## Estructura de Base de Datos (SQLite)
-- **Tablas:**
-  - `billeteras` (id, nombre, saldo, color, fecha_creacion)
-  - `transacciones` (id, billetera_id, tipo, categoria, monto, descripcion, fecha)
-- **Consultas principales:**
-  - Obtener todas las transacciones de usuario
-  - Filtrar transacciones por billetera
-  - Estadísticas por categoría y fecha
-
----
-
-## Autenticación
-- Simulada/local (puede integrarse con backend si se requiere)
-- Hook `useAuth` para gestión de usuario
-
----
-
-## Buenas Prácticas y Detalles Técnicos
-- Código modular y reutilizable
-- Manejo de estados con hooks y callbacks
-- Navegación optimizada con expo-router
-- UI responsiva y accesible
-- Feedback visual/háptico en acciones clave
-- Sin dependencias innecesarias ni scripts de ejemplo
-
----
-
-## Ejemplo de Uso
-1. Crea una billetera (ej: "Efectivo")
+Di qué prefieres y lo hago.
 2. Agrega ingresos y gastos con categoría
-3. Visualiza estadísticas y gráficos filtrando por billetera
-4. Edita o elimina transacciones según necesidad
-
----
-
-## Créditos y Autoría
-- Desarrollado por: Marco Campos, Erick Mora y Alejandro Aguilar
-- Profesor: Francisco Cervantes
-- Fecha: Junio 2025
-
----
-
-## Notas Finales
-- Compatible con Expo Go y emuladores Android/iOS
-- No requiere conexión a internet
-- Código limpio, comentado y fácil de mantener
-- ¡Ideal para proyectos escolares y personales!
-
----
-
-¡Gracias por revisar el proyecto!

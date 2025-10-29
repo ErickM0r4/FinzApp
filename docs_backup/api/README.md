@@ -1,5 +1,6 @@
-Este archivo fue movido a `docs_backup/api/README.md`.
-Consulta la carpeta `docs_backup/api/` para ver la documentación completa y los archivos originales.
+Finanzas API (scaffold)
+
+Pequeña API Express para conectar con PostgreSQL (útil para exponer datos de `transacciones`).
 
 1. Instalación
 

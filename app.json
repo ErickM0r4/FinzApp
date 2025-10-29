@@ -1,28 +1,33 @@
 {
   "expo": {
-    "name": "AppGastos",
-    "slug": "AppGastos",
+    "name": "FinzApp",
+    "slug": "finzapp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "appgastos",
+    "icon": "./assets/images/finzapp-icon.png",
+    "scheme": "finzapp",
     "userInterfaceStyle": "automatic",
+
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.mora.finzapp"
     },
+
     "android": {
-      "package": "com.danut.appgastos",
+      "package": "com.mora.finzapp",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/finzapp-icon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true
     },
+
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/finzapp-icon.png"
     },
+
     "plugins": [
       [
         "expo-build-properties",
@@ -38,8 +43,8 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
+          "image": "./assets/images/splash.png",
+          "imageWidth": 180,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
@@ -61,13 +66,15 @@
         }
       ]
     ],
+
     "experiments": {
       "typedRoutes": true
     },
+
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "318cd895-17a4-40bf-b7dc-6dc9c4f2d0cc"
+        "projectId": "271ff5c9-9b31-4037-92b5-864e23eef4b9"
       }
     }
   }
