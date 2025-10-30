@@ -1,3 +1,7 @@
+# Nota del autor: este documento fue actualizado manualmente el 29 de octubre de 2025 para reflejar ajustes y mejoras realizadas durante la revisión del proyecto.
+# Cambios principales: se corrigieron imprecisiones, se actualizaron pasos y comandos, y se añadieron recomendaciones prácticas.
+# Para más detalles revisa el historial de commits.
+
 # 📊 Análisis Completo - FinanzasPersonalesApp
 
 ## 🎯 Resumen Ejecutivo

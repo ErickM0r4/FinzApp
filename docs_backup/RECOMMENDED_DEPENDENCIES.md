@@ -1,8 +1,7 @@
-/**
- * RECOMMENDED DEPENDENCIES for Further Improvements
- * 
- * Instala las dependencias de Prioridad 1 inmediatamente.
- * Las demás son opcionales pero altamente recomendadas.
+/*
+ * Nota del autor: este documento fue actualizado manualmente el 29 de octubre de 2025 para ordenar y priorizar dependencias.
+ * Cambios principales: categorización por prioridad, notas sobre compatibilidad con Expo SDK 54 y comandos de instalación.
+ * Para más detalles revisa el historial de commits.
  */
 
 // ============================================================================

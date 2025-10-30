@@ -1,9 +1,5 @@
 Este archivo fue movido a `docs_backup/ANDROID_SETUP.md`.
 Consulta la carpeta `docs_backup/` para ver la documentación completa y los archivos originales.
-
-### PASO 1: Verificar que Android Studio esté instalado
-```bash
-# Verifica que tienes Android Studio
 # Windows: Busca "Android Studio" en inicio
 ```
 

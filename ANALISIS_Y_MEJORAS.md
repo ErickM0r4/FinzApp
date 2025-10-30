@@ -1,8 +1,5 @@
 Este archivo fue movido a `docs_backup/ANALISIS_Y_MEJORAS.md`.
 Consulta la carpeta `docs_backup/` para ver la documentación completa y los archivos originales.
-- Sin sanitización de inputs
-- Límites de saldo sin restricción
-- Transacciones pueden ser negativas sin validar
 
 **Riesgo:** `ALTO` - Integridad de datos comprometida
 

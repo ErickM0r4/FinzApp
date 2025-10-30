@@ -1,3 +1,6 @@
+Nota del autor: este documento fue actualizado manualmente el 29 de octubre de 2025 para clarificar la instalación y las variables de entorno de la API.
+Cambios principales: se corrigieron ejemplos de `.env`, se aclararon comandos de instalación y se añadieron notas de seguridad.
+
 Finanzas API (scaffold)
 
 Pequeña API Express para conectar con PostgreSQL (útil para exponer datos de `transacciones`).

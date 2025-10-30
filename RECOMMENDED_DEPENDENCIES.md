@@ -1,10 +1,5 @@
 Este archivo fue movido a `docs_backup/RECOMMENDED_DEPENDENCIES.md`.
 Consulta la carpeta `docs_backup/` para ver la documentación completa y los archivos originales.
- * Instala las dependencias de Prioridad 1 inmediatamente.
- * Las demás son opcionales pero altamente recomendadas.
- */
-
-// ============================================================================
 // PRIORIDAD 1: CRÍTICA - Instalar ahora para seguridad
 // ============================================================================
 

@@ -1,3 +1,7 @@
+# Nota del autor: este documento fue actualizado manualmente el 29 de octubre de 2025 para dejar constancia de las mejoras implementadas.
+# Cambios principales: resumen ejecutivo mejorado, reorganización de secciones y correcciones menores de estilo.
+# Para más detalles revisa el historial de commits.
+
 # 🎉 Mejoras Implementadas - Mora Finance App
 
 ## 👋 Bienvenida

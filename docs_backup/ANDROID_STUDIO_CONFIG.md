@@ -1,3 +1,7 @@
+# Nota del autor: este documento fue actualizado manualmente el 29 de octubre de 2025 para mejorar la guía de uso de Android Studio y Device Manager.
+# Cambios principales: añadido pasos alternativos, solucionado un ejemplo de ruta y clarificados tiempos de espera.
+# Para más detalles revisa el historial de commits.
+
 # 🤖 Android Studio - Guía Completa para Emulador
 
 ## 📲 PROBLEMA QUE VISTE:

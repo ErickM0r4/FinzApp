@@ -1,6 +1,8 @@
-# 🚀 Guía de Implementación de Mejoras
+# Nota del autor: este documento fue actualizado manualmente el 29 de octubre de 2025 para ordenar y clarificar los pasos de implementación.
+# Cambios principales: reordené los pasos por prioridad, añadí ejemplos prácticos y limpié secciones redundantes.
+# Para más detalles revisa el historial de commits.
 
-## ✅ Mejoras Implementadas (Completadas)
+# 🚀 Guía de Implementación de Mejoras
 
 ### 1. **Validación Centralizada de Inputs** ✓
 **Archivo:** `lib/validators.ts`

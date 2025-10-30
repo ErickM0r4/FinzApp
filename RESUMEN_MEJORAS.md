@@ -1,10 +1,5 @@
-# Este archivo fue movido a `docs_backup/RESUMEN_MEJORAS.md`.
+Este archivo fue movido a `docs_backup/RESUMEN_MEJORAS.md`.
 Consulta la carpeta `docs_backup/` para ver la documentación completa y los archivos originales.
-**Estado:** ✅ Fase 1 Completada | 🚧 Fase 2 Iniciada
-
----
-
-## 🎯 Visión General
 
 | Aspecto | Antes | Después | Impacto |
 |--------|-------|---------|---------|

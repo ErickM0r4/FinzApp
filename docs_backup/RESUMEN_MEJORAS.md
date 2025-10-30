@@ -1,3 +1,7 @@
+# Nota del autor: este documento fue actualizado manualmente el 29 de octubre de 2025 para resumir las mejoras aplicadas.
+# Cambios principales: corrección de métricas, claridad en entregables y reorganización por prioridad.
+# Para más detalles revisa el historial de commits.
+
 # 📊 RESUMEN DE MEJORAS - Mora Finance App
 
 **Fecha:** 28 de Octubre, 2025  

@@ -1,10 +1,5 @@
 Este archivo fue movido a `docs_backup/ANDROID_STUDIO_CONFIG.md`.
 Consulta la carpeta `docs_backup/` para ver la documentación completa y los archivos originales.
-### ✨ RESULTADO FINAL
-
-Tu app **Mora Finance** debería aparecer en el emulador en 10-20 segundos 🎉
-
----
 
 ## 🔧 TROUBLESHOOTING
 

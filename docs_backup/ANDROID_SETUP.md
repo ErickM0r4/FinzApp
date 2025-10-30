@@ -1,3 +1,7 @@
+# Nota del autor: este documento fue actualizado manualmente el 29 de octubre de 2025 para clarificar los pasos de configuración del emulador Android.
+# Cambios principales: he simplificado comandos, añadido comprobaciones de variables de entorno y anotado soluciones comunes.
+# Para más detalles revisa el historial de commits.
+
 # 🔧 GUÍA - Ejecutar en Android Studio Emulator
 
 ## ✅ Pasos para Configurar Android Studio

@@ -1,3 +1,7 @@
+# Nota del autor: este documento fue actualizado manualmente el 29 de octubre de 2025 para dejar constancia de los ajustes realizados en la arquitectura.
+# Cambios principales: clarificación de capas, corrección en el flujo de notificaciones y anotaciones sobre responsabilidades de módulos.
+# Para más detalles revisa el historial de commits.
+
 # 🏗️ ARQUITECTURA DE MEJORAS - Mora Finance App
 
 ## Diagrama de Flujo General

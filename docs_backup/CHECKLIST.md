@@ -1,8 +1,8 @@
-# ✅ CHECKLIST - Mora Finance App Improvements
+# Nota del autor: este documento fue actualizado manualmente el 29 de octubre de 2025 para reflejar las tareas realizadas y su estado.
+# Cambios principales: revisión de entradas, aclaración de estimados y reorganización por prioridad.
+# Para más detalles revisa el historial de commits.
 
-**Generado:** 28 de Octubre, 2025  
-**Por:** GitHub Copilot  
-**Proyecto:** FinanzasPersonalesApp - Mora Finance
+# ✅ CHECKLIST - Mora Finance App Improvements
 
 ---
 

@@ -1,23 +1,5 @@
 Este archivo fue movido a `docs_backup/CHECKLIST.md`.
 Consulta la carpeta `docs_backup/` para ver la documentación completa y los archivos originales.
-**Por:** GitHub Copilot  
-**Proyecto:** FinanzasPersonalesApp - Mora Finance
-
----
-
-## 📦 FASE 1: Mejoras Implementadas (✅ DONE)
-
-### ✅ 1. Sistema de Validación
-- [x] Archivo `lib/validators.ts` creado
-- [x] Email validation (RFC 5322)
-- [x] Password strength validation
-- [x] Monetary amount validation
-- [x] User name validation
-- [x] Date validation (future/past checks)
-- [x] Input sanitization
-- [x] JSDoc documentation
-
-**Estado:** ✅ COMPLETO | **Líneas:** 210 | **Funciones:** 12
 
 ---
 

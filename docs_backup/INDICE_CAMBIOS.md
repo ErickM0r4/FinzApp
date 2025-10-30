@@ -1,8 +1,8 @@
-# 📋 ÍNDICE COMPLETO DE MEJORAS
+# Nota del autor: este documento fue actualizado manualmente el 29 de octubre de 2025 para consolidar y clarificar el índice de cambios.
+# Cambios principales: agrupación por categoría, corrección de fechas y normalización de nomenclatura.
+# Para más detalles revisa el historial de commits.
 
-**Fecha:** 28 de Octubre, 2025  
-**Proyecto:** Mora Finance App - FinanzasPersonalesApp  
-**Estado:** ✅ Fase 1 Completada | 🚧 Documentación Finalizada
+# 📋 ÍNDICE COMPLETO DE MEJORAS
 
 ---
 

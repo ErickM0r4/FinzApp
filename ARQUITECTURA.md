@@ -1,13 +1,5 @@
-# 🏗️ ARQUITECTURA DE MEJORAS - Mora Finance App
-
-## Diagrama de Flujo General
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    USER INTERACTION                          │
-│              (Input form, Button click, etc)                 │
-└──────────────────────┬──────────────────────────────────────┘
-                       │
+Este archivo fue movido a `docs_backup/ARQUITECTURA.md`.
+Consulta la carpeta `docs_backup/` para ver la documentación completa y los archivos originales.
                        ▼
         ┌──────────────────────────────┐
         │   INPUT VALIDATION LAYER     │
