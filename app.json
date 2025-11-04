@@ -36,15 +36,15 @@
         }
       ],
       "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/splash.png",
-          "imageWidth": 180,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
-        }
-      ],
+    [
+      "expo-splash-screen",
+      {
+        "image": "./assets/images/splash-icon.png",
+        "imageWidth": 180,
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff"
+      }
+    ],
       [
         "expo-sqlite",
         {
